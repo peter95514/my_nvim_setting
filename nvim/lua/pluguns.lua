@@ -189,6 +189,16 @@ require("lazy").setup({
         end,
     },
 
+    --markdown
+    {
+        "iamcco/markdown-preview.nvim",
+        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+        build = "cd app && yarn install",
+        init = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
+    },
     --autopair
     {
         "windwp/nvim-autopairs",
@@ -263,7 +273,8 @@ require("lazy").setup({
 |               .`               ________________    ________  `.               |
 |            .`                 /________________\   \________.   `.            |
 \___________`_______________________________________________________`___________/
-]], "\n"),
+]], "
+"),
 
                     center = {
                         {
