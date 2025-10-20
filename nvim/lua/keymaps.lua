@@ -5,11 +5,14 @@ local opts = { noremap = true, silent = true }
 -- 普通模式下的快捷键
 set_keymap('n', '<leader>w', ':w<CR>', { noremap = true, silent = true })  -- 保存文件
 set_keymap('n', '<leader>q', ':q<CR>', { noremap = true, silent = true })  -- 退出
+vim.keymap.set("n", "<A-l>", "<Esc>E", { desc = "移動到下一個字的結尾" })
+vim.keymap.set("n", "<A-h>", "<Esc>ge", { desc = "移動到上一個字的結尾" })
 vim.g.mapleader = " "
 
 -- 插入模式下的快捷键
 set_keymap('i', 'jk', '<Esc>', { noremap = true, silent = true })  -- 退出插入模式
-
+vim.keymap.set("i", "<A-l>", "<Esc>ea", { desc = "移動到下一個字的結尾" })
+vim.keymap.set("i", "<A-h>", "<Esc>gea", { desc = "移動到上一個字的結尾" })
 
 -- nvimtree
 set_keymap("n", ";", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
@@ -53,3 +56,6 @@ vim.keymap.set("n", "M", "<Plug>Sneak_S", {})
 --Plamtumlpreview
 vim.keymap.set("n", "<A-u>", "<cmd>PlantumlPreview<CR>", { desc = "PlantUML Preview" })
 vim.keymap.set("n", "<A-U>", "<cmd>PlantumlStopPreview<CR>", { desc = "Stop PlantUML Preview" })
+
+--markdown
+vim.keymap.set("n", "<A-n>", ":MarkdownPreviewToggle<CR>", { noremap = true, silent = true, desc = "Toggle Markdown Preview" })
