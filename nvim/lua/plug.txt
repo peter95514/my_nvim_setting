@@ -51,88 +51,6 @@ require("lazy").setup({
     	end
 	},
 
-    -- formatter.nvim
-    {
-        "mhartington/formatter.nvim",
-        event = "VeryLazy",
-        config = function()
-            local util = require("formatter.util")
-            
-            -- 定義你的設定檔全域路徑 (這裡用 vim.fn.stdpath('config') 自動抓取 ~/.config/nvim)
-            local setting_dir = vim.fn.stdpath("config") .. "/settings"
-
-            require("formatter").setup({
-                logging = true,
-                log_level = vim.log.levels.WARN,
-                
-                filetype = {
-                    -- Python: 指定 --config 參數
-                    python = {
-                        function()
-                            return {
-                                exe = "black",
-                                args = {
-                                    "--config", setting_dir .. "/black.toml",
-                                    "-", -- 重要：從 stdin 讀取
-                                },
-                                stdin = true,
-                            }
-                        end
-                    },
-                    
-                    -- C/C++: 指定 --style=file:<path> 參數
-                    cpp = {
-                        function()
-                            return {
-                                exe = "clang-format",
-                                args = {
-                                    -- 注意：clang-format 12+ 支援直接指定路徑
-                                    "--style=file:" .. setting_dir .. "/.clang-format",
-                                    "--assume-filename",
-                                    util.escape_path(util.get_current_buffer_file_name()),
-                                },
-                                stdin = true,
-                                try_node_modules = true,
-                            }
-                        end
-                    },
-                    -- C 同上
-                    c = {
-                        function()
-                            return {
-                                exe = "clang-format",
-                                args = {
-                                    "--style=file:" .. setting_dir .. "/.clang-format",
-                                    "--assume-filename",
-                                    util.escape_path(util.get_current_buffer_file_name()),
-                                },
-                                stdin = true,
-                            }
-                        end
-                    },
-
-                    -- Lua 保持預設
-                    lua = {
-                        require("formatter.filetypes.lua").stylua,
-                    },
-                    
-                    ["*"] = {
-                        require("formatter.filetypes.any").remove_trailing_whitespace,
-                    }
-                }
-            })
-
-            -- 自動排版 autocmd
-            local augroup = vim.api.nvim_create_augroup
-            local autocmd = vim.api.nvim_create_autocmd
-            augroup("__formatter__", { clear = true })
-            autocmd("BufWritePost", {
-                group = "__formatter__",
-                command = "FormatWrite",
-            })
-        end
-    },
-
     --PlantumlPreview
     {
     'weirongxu/plantuml-previewer.vim',
@@ -161,9 +79,9 @@ require("lazy").setup({
 
             vim.notify = notify
         end,
-    },
+    },--]]
 
-    --[[--neoscroll
+    --[[neoscroll
     {
         "karb94/neoscroll.nvim",
         event = "WinScrolled",  -- 或 "VeryLazy", 或 "BufReadPost" 根據你的需求
@@ -208,7 +126,7 @@ require("lazy").setup({
         end,
     },--]]
 
-    --folke_noice
+    --[[folke_noice
     {
         "folke/noice.nvim",
         lazy = true,
@@ -269,18 +187,8 @@ require("lazy").setup({
                 },
             })
         end,
-    },
+    },--]]
 
-    --markdown
-    {
-        "iamcco/markdown-preview.nvim",
-        cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-        build = "cd app && yarn install",
-        init = function()
-            vim.g.mkdp_filetypes = { "markdown" }
-        end,
-        ft = { "markdown" },
-    },
     --autopair
     {
         "windwp/nvim-autopairs",
@@ -355,7 +263,8 @@ require("lazy").setup({
 |               .`               ________________    ________  `.               |
 |            .`                 /________________\   \________.   `.            |
 \___________`_______________________________________________________`___________/
-]], "\n"),
+]], "
+"),
 
                     center = {
                         {
@@ -533,7 +442,16 @@ require("lazy").setup({
     --nvim_cmp
     {
         "hrsh7th/nvim-cmp",
+        dependencies = {
+            "hrsh7th/cmp-nvim-lsp",
+            "hrsh7th/cmp-buffer",
+            "hrsh7th/cmp-path",
+            "hrsh7th/cmp-vsnip",
+            "hrsh7th/vim-vsnip",
+            "rafamadriz/friendly-snippets",
+        },
         config = function()
+        local capabilities = require('cmp_nvim_lsp').default_capabilities()
         local cmp = require'cmp'
         vim.o.updatetime = 300  -- 設定燈泡更新的時間，這樣可以避免顯示:
         cmp.setup({
@@ -571,10 +489,14 @@ require("lazy").setup({
       local lspconfig = require'lspconfig'
       vim.g.lightbulb_enabled = 0
       --Python lsp
-      lspconfig.pyright.setup{}
+      lspconfig.pyright.setup({
+        --capabilities = capabilities,
+      })
+
 
       -- C/C++ LSP
       lspconfig.clangd.setup{
+        --cmd = { "clangd", "--background-index", "--clang-tidy", "--completion-style=detailed", "--header-insertion=never" },
         cmd = { "clangd", "--background-index", "--clang-tidy" },
         filetypes = { "c", "cpp", "objc", "objcpp" },
         settings = {
