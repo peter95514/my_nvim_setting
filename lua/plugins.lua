@@ -57,14 +57,14 @@ require("lazy").setup({
         event = "VeryLazy",
         config = function()
             local util = require("formatter.util")
-            
+
             -- 定義你的設定檔全域路徑 (這裡用 vim.fn.stdpath('config') 自動抓取 ~/.config/nvim)
             local setting_dir = vim.fn.stdpath("config") .. "/settings"
 
             require("formatter").setup({
                 logging = true,
                 log_level = vim.log.levels.WARN,
-                
+
                 filetype = {
                     -- Python: 指定 --config 參數
                     python = {
@@ -79,7 +79,7 @@ require("lazy").setup({
                             }
                         end
                     },
-                    
+
                     -- C/C++: 指定 --style=file:<path> 參數
                     cpp = {
                         function()
@@ -115,7 +115,7 @@ require("lazy").setup({
                     lua = {
                         require("formatter.filetypes.lua").stylua,
                     },
-                    
+
                     ["*"] = {
                         require("formatter.filetypes.any").remove_trailing_whitespace,
                     }
@@ -139,7 +139,7 @@ require("lazy").setup({
     dependencies = { 'tyru/open-browser.vim' },
     ft = { 'plantuml' }
     },
-    
+
     --notify
     {
         "rcarriga/nvim-notify",
@@ -287,7 +287,7 @@ require("lazy").setup({
         event = "InsertEnter",
         config = function()
         require("nvim-autopairs").setup({})
-    
+
         -- 與 nvim-cmp 相容（如果你有使用 nvim-cmp 的話）
         local cmp_autopairs = require("nvim-autopairs.completion.cmp")
         local cmp = require("cmp")
@@ -585,7 +585,10 @@ require("lazy").setup({
 		        }
             }
         }
-    }
+      }
+
+      -- C#
+      lspconfig.csharp_ls.setup{}
     end
   },
 
