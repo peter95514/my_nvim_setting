@@ -12,6 +12,15 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+      {
+    "seblyng/roslyn.nvim",
+    ---@module 'roslyn.config'
+    ---@type RoslynNvimConfig
+    ft = { "cs", "razor" },
+    opts = {
+      -- your configuration comes here; leave empty for default settings
+     },
+    },
 
     --TokyoNight
     {
@@ -62,7 +71,7 @@ require("lazy").setup({
             local setting_dir = vim.fn.stdpath("config") .. "/settings"
 
             require("formatter").setup({
-                logging = true,
+                logging = false,
                 log_level = vim.log.levels.WARN,
 
                 filetype = {
@@ -118,6 +127,7 @@ require("lazy").setup({
 
                     ["*"] = {
                         require("formatter.filetypes.any").remove_trailing_whitespace,
+                        command = "silent! FormatWrite",
                     }
                 }
             })
